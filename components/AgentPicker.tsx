@@ -1,7 +1,7 @@
 // The plugin's own model picker: a search box over the model catalogue that
 // filters the way the prompt input's picker does.
 import { useCallback, useEffect, useState } from "react";
-import { useRealtime, useRpc } from "@get-bb/plugin-sdk/app";
+import { useRealtime, useRpc } from "@riftlabs/plugin-sdk/app";
 import { toast } from "sonner";
 import type { rpcContract } from "../server";
 import {

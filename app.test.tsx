@@ -6,7 +6,7 @@ import {
   renderSlot,
   type PluginRpcTestHandlers,
   type RenderedSlot,
-} from "@get-bb/plugin-sdk/testing/app";
+} from "@riftlabs/plugin-sdk/testing/app";
 import type { rpcContract } from "./server";
 import type { ModelChoice } from "./lib/models";
 

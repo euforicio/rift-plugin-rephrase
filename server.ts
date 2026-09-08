@@ -2,7 +2,7 @@
 //
 // The composer action posts the current draft here; this file runs it through
 // an agent in a throwaway hidden thread and returns the rewritten prompt.
-import { defineRpcContract, type BbPluginApi } from "@get-bb/plugin-sdk";
+import { defineRpcContract, type RiftPluginApi } from "@riftlabs/plugin-sdk";
 import { z } from "zod";
 import {
   stripModelBrandPrefix,
@@ -138,7 +138,7 @@ interface RephraseTarget {
   environmentId: string | null;
 }
 
-export default function plugin(bb: BbPluginApi) {
+export default function plugin(bb: RiftPluginApi) {
   const settings = bb.settings.define({
     instruction: {
       type: "string",
@@ -223,7 +223,7 @@ interface CatalogSnapshot {
  * background, and every partial result is published so the picker fills in
  * while discovery is still running.
  */
-function createCatalogCache(bb: BbPluginApi) {
+function createCatalogCache(bb: RiftPluginApi) {
   let snapshot: CatalogSnapshot | null = null;
   let discovery: Promise<void> | null = null;
   /** Readers waiting for the next snapshot, so a cold read can answer early. */
@@ -296,7 +296,7 @@ function createCatalogCache(bb: BbPluginApi) {
  * finishes, so a background refresh never blanks the list.
  */
 async function runDiscovery(
-  bb: BbPluginApi,
+  bb: RiftPluginApi,
   current: () => CatalogSnapshot | null,
   publish: (next: CatalogSnapshot) => Promise<void>,
 ): Promise<void> {
@@ -334,7 +334,7 @@ async function runDiscovery(
 
 /** One agent's models, or null when it has no catalogue to report. */
 async function providerChoices(
-  bb: BbPluginApi,
+  bb: RiftPluginApi,
   provider: { id: string; displayName: string },
 ): Promise<ModelChoice[] | null> {
   let options;
@@ -377,7 +377,7 @@ async function providerChoices(
  * defaults for the root compose screen.
  */
 async function resolveTarget(
-  bb: BbPluginApi,
+  bb: RiftPluginApi,
   scope: ComposerScope,
   selection: AgentSelection | null,
 ): Promise<RephraseTarget> {
@@ -423,7 +423,7 @@ async function resolveTarget(
  * from the root composer does not create a worktree of its own.
  */
 async function latestEnvironmentId(
-  bb: BbPluginApi,
+  bb: RiftPluginApi,
   projectId: string,
 ): Promise<string | null> {
   const threads = await bb.sdk.threads
@@ -438,13 +438,13 @@ async function latestEnvironmentId(
  * implement, so the mode is narrowed per provider instead of hardcoded.
  */
 async function restrictedPermissionMode(
-  bb: BbPluginApi,
+  bb: RiftPluginApi,
   providerId: string | undefined,
 ): Promise<PermissionMode | null> {
   if (providerId === undefined) return null;
   const providers = await bb.sdk.providers.list().catch(() => []);
   const supported = providers.find((provider) => provider.id === providerId)
-    ?.capabilities.supportedPermissionModes;
+    ?.capabilities.permissionModes;
   if (supported === undefined) return null;
   return (
     PERMISSION_MODE_PREFERENCE.find((mode) => supported.includes(mode)) ?? null
@@ -467,7 +467,7 @@ function buildPrompt(instruction: string, text: string): string {
  * runtime behind.
  */
 async function runRephraseThread(
-  bb: BbPluginApi,
+  bb: RiftPluginApi,
   target: RephraseTarget,
   prompt: string,
   timeoutMs: number,

@@ -1,5 +1,8 @@
 {
-  "name": "bb-plugin-rephrase",
+  "name": "rift-plugin-rephrase",
+  "homepage": "https://riftlabs.app",
+  "author": "Rift Labs",
+  "repository": { "type": "git", "url": "https://github.com/euforicio/rift-plugin-rephrase.git" },
   "version": "0.2.1",
   "description": "Re-phrase button in the bb prompt input: rewrites your draft into a clearer prompt with an agent.",
   "license": "MIT",
@@ -11,15 +14,15 @@
     "composer"
   ],
   "engines": {
-    "bb": ">=0.38",
-    "bbPluginSdk": ">=0.4.6"
+    "rift": ">=0.38",
+    "riftPluginSdk": ">=0.4.48"
   },
   "scripts": {
     "build": "bb plugin build",
     "test": "vitest run",
     "typecheck": "tsc --noEmit"
   },
-  "bb": {
+  "rift": {
     "name": "Re-phrase",
     "description": "Adds a Re-phrase button to the prompt input that rewrites your draft into a clearer, more effective prompt.",
     "branding": {
@@ -39,7 +42,7 @@
     "zod": "^4.3.6"
   },
   "devDependencies": {
-    "@get-bb/plugin-sdk": "0.4.6",
+    "@riftlabs/plugin-sdk": "0.4.48",
     "@radix-ui/react-tooltip": "^1.2.16",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/react": "^16.3.2",

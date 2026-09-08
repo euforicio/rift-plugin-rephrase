@@ -10,7 +10,7 @@ import {
   useRpc,
   type ComposerView,
   type PluginComposerApi,
-} from "@get-bb/plugin-sdk/app";
+} from "@riftlabs/plugin-sdk/app";
 import { toast } from "sonner";
 import type {
   ComposerScope,
